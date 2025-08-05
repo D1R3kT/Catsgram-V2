@@ -7,10 +7,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode
 public class Post {
-    UUID id;
-    UUID authorId;
+    Long id;
+    Long authorId;
     String description;
     Instant postDate;
 }

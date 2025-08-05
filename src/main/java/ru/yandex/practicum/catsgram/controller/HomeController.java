@@ -1,15 +1,18 @@
 package ru.yandex.practicum.catsgram.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
-@RequestMapping("/api/v1/board")
+@RequestMapping("/home")
 public class HomeController {
-
     @GetMapping
     public String homePage() {
-        return "<h1> Hello <h1>";
+        log.info("getHomePage");
+        return "<h1> Приветствуем вас в приложении Котограм <h1>";
+
     }
 }
