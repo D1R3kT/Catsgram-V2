@@ -15,7 +15,8 @@ import java.util.UUID;
 @RequestMapping("/posts")
 public class PostController {
 
-    private final Map<UUID, Post> posts = new HashMap<>();
+    private final Map<Integer, Post> posts = new HashMap<>();
+    private int id = 1;
 
     @GetMapping
     public Collection<Post> findAll() {
@@ -27,7 +28,7 @@ public class PostController {
         if(post.getDescription() == null || post.getDescription().isBlank()) {
             throw new ConditionsNotMetException("Описание не может быть пустым");
         }
-        post.setId(getUUID());
+        post.setId(createId());
         post.setPostDate(Instant.now());
         posts.put(post.getId(), post);
         return post;
@@ -50,7 +51,6 @@ public class PostController {
         }
     }
 
-    private UUID getUUID() {
-        return UUID.randomUUID();
-    }
+    private Integer createId() {
+        return id++;   }
 }

@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/board")
+@RequestMapping("/home")
 public class HomeController {
 
     @GetMapping
     public String homePage() {
-        return "<h1> Hello <h1>";
+        return "<h1> Приветствуем вас в приложении Котограм <h1>";
     }
 }
