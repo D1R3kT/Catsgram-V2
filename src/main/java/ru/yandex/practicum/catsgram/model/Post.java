@@ -9,8 +9,8 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(of = {"id"})
 public class Post {
-    UUID id;
-    UUID authorId;
+    Integer id;
+    Integer authorId;
     String description;
     Instant postDate;
 }
