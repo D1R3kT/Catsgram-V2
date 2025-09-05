@@ -7,9 +7,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(of = {"email"})
+@EqualsAndHashCode
 public class User {
-    Integer id;
+    Long id;
     String username;
     String email;
     String password;
