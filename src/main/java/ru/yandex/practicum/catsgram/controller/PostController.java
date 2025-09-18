@@ -2,11 +2,14 @@ package ru.yandex.practicum.catsgram.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.catsgram.enums.SortOrder;
 import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.service.PostService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -15,13 +18,20 @@ import java.util.Collection;
 public class PostController {
     private final PostService postService;
 
+    @GetMapping("/{postId}")
+    public Optional<Post> getPost(@PathVariable(value = "postId") long postId) {
+        return postService.findById(postId);
+    }
 
     @GetMapping
-    public Collection<Post> findAll() {
-        return postService.findAll();
+    public Collection<Post> findAll(@RequestParam(defaultValue = "desc") String sort,
+                                    @RequestParam(defaultValue = "0") int from,
+                                    @RequestParam(defaultValue = "10") int size) {
+        return postService.findAll(SortOrder.from(sort), from, size);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Post create(@RequestBody Post post) {
         return postService.create(post);
     }

@@ -1,27 +1,32 @@
 package ru.yandex.practicum.catsgram.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.catsgram.enums.SortOrder;
 import ru.yandex.practicum.catsgram.exceptions.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exceptions.NotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
-    private final Map<Long, Post> posts = new HashMap<>();
     private final UserService userService;
 
-    @Autowired
-    public PostService(UserService userService) {
-        this.userService = userService;
-    }
-    public Collection<Post> findAll() {
-        return posts.values();
+    private final Map<Long, Post> posts = new HashMap<>();
+    private final Comparator<Post> postDateComparator = Comparator.comparing(Post::getPostDate);
+
+    public Collection<Post> findAll(SortOrder sort, int from, int size) {
+        return posts.values()
+                .stream()
+                .sorted(sort.equals(SortOrder.ASCENDING)?
+                        postDateComparator : postDateComparator.reversed())
+                .skip(from)
+                .limit(size)
+                .toList();
     }
 
     public Post create(Post post) {
@@ -50,6 +55,10 @@ public class PostService {
             return oldPost;
         }
         throw new NotFoundException("Пост с id = " + newPost.getId() + " не найден");
+    }
+
+    public Optional<Post> findById(long postId) {
+        return Optional.ofNullable(posts.get(postId));
     }
 
 
