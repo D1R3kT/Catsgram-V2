@@ -13,7 +13,7 @@ public class HomeController {
     @GetMapping
     public String homePage() {
         log.info("getHomePage");
-        return "<h1> Приветствуем вас в приложении Котограм <h1>";
+        return "<h1> Приветствуем вас, в приложении Котограм <h1>";
 
     }
 }
