@@ -1,7 +1,6 @@
 package ru.yandex.practicum.catsgram.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.enums.SortOrder;
 import ru.yandex.practicum.catsgram.exceptions.ConditionsNotMetException;
@@ -22,7 +21,7 @@ public class PostService {
     public Collection<Post> findAll(SortOrder sort, int from, int size) {
         return posts.values()
                 .stream()
-                .sorted(sort.equals(SortOrder.ASCENDING)?
+                .sorted(sort.equals(SortOrder.ASCENDING) ?
                         postDateComparator : postDateComparator.reversed())
                 .skip(from)
                 .limit(size)

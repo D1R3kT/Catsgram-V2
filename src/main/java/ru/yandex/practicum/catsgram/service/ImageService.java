@@ -1,6 +1,5 @@
 package ru.yandex.practicum.catsgram.service;
 
-import ch.qos.logback.core.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,22 +30,17 @@ public class ImageService {
 
     //получение данных об изображениях указанного поста
     public List<Image> getPostImage(long postId) {
-        return images.values()
-                .stream()
-                .filter(image -> image.getPostId() == postId)
-                .collect(Collectors.toList());
+        return images.values().stream().filter(image -> image.getPostId() == postId).collect(Collectors.toList());
     }
 
     //сохранение файла изображения
     private Path saveFile(MultipartFile file, Post post) {
         try {
             // формирование уникального названия файла на основе текущего времени и расширения оригинального файла
-            String uniqueFileName = String.format("%d.%s", Instant.now().toEpochMilli(),
-                    StringUtils.getFilenameExtension(file.getOriginalFilename()));
+            String uniqueFileName = String.format("%d.%s", Instant.now().toEpochMilli(), StringUtils.getFilenameExtension(file.getOriginalFilename()));
 
             // формирование пути для сохранения файла с учетом идентификаторов автора и поста
-            Path uploadPath = Paths.get(imageDirectory, String.valueOf(post.getAuthorId()),
-                    post.getId().toString());
+            Path uploadPath = Paths.get(imageDirectory, String.valueOf(post.getAuthorId()), post.getId().toString());
             Path filePath = uploadPath.resolve(uniqueFileName);
 
             // создаем директории, если они еще не созданы
@@ -64,15 +58,12 @@ public class ImageService {
 
     // сохранение списка изображений, связанных с указанным постом
     public List<Image> saveImage(long postId, List<MultipartFile> files) {
-        return files.stream()
-                .map(file -> saveImage(postId, file))
-                .collect(Collectors.toList());
+        return files.stream().map(file -> saveImage(postId, file)).collect(Collectors.toList());
     }
 
     // сохранение отдельного изображения, связанного с указанным постом
     private Image saveImage(long postId, MultipartFile file) {
-        Post post = postService.findById(postId)
-                .orElseThrow(() -> new ConditionsNotMetException("Указанный пост не найден"));
+        Post post = postService.findById(postId).orElseThrow(() -> new ConditionsNotMetException("Указанный пост не найден"));
 
         // сохраняем изображение на диск и возвращаем путь к файлу
         Path filePath = saveFile(file, post);
@@ -94,11 +85,7 @@ public class ImageService {
     }
 
     private long getNextId() {
-        long currentMaxId = images.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
+        long currentMaxId = images.keySet().stream().mapToLong(id -> id).max().orElse(0);
         return ++currentMaxId;
     }
 
@@ -121,12 +108,10 @@ public class ImageService {
             try {
                 return Files.readAllBytes(path);
             } catch (IOException exp) {
-                throw new ImageFileException("ошибка чтения файла. Id: " + image.getId()
-                + ", name: " + image.getOriginalFileName() + exp);
+                throw new ImageFileException("ошибка чтения файла. Id: " + image.getId() + ", name: " + image.getOriginalFileName() + exp);
             }
         } else {
-            throw new ImageFileException("Файл не найден. Id: " + image.getId()
-                    + ", name: " + image.getOriginalFileName());
+            throw new ImageFileException("Файл не найден. Id: " + image.getId() + ", name: " + image.getOriginalFileName());
         }
     }
 }

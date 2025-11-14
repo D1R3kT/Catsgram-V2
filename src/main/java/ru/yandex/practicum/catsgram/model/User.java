@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
